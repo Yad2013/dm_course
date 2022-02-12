@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diabetes Nutrition Program</title>
+<link rel="stylesheet" href="index.css">
+</head>
+<body>
+<div id=lng></div>
+<div id=vid onclick="vid_click()" ondblclick="vid_dblclick()"></div>
+<div id=txt></div>
+<div id=ftr></div>
+<audio id=aud preload=metadata ontimeupdate="audio_update()" onended="audio_ended()"><source src="" type="audio/mpeg"></audio>
+<audio id=aud2 preload=metadata onended="audio_ended2()"><source src="" type="audio/mpeg"></audio>
+<script src="data.js"></script>
+<script src="index.js"></script>
+</body>
+</html>
+
+<!--
+FEATURES
+* interactive vector video slides
+* get markdown text (or similar) and make into slideshow which moves with cues from an mp3 file
+* put slides into proper format like poster automatically
+* support for rtl and ltr
+* support introducing elements one by one and gray out
+* support a highlighter or indicator similar to a pen?
+* ask questions and record their answer in a database conntected to their profile
+* connect slide narration with slide?
+* make caption file (srt) automatically
+* after asking questions, offer what to watch next: questions 1, 2 or 3?
+* other courses: parenting, marriage, english course intro...
+* add reference eg occult diabetes...
+* social media for DM patients? Group support?
+* make collapsible mind map
+* follow up on patients weight, compliance %, why not 100%?
+
+TODO
+* add audio for each slide (26 so far)
+* add htn duration, medications, referred by (see dm sheet), family history (slide oon geneitcs?), smoking
+* upload local storage data to server
+* check ppt, transo, doc, xoraki tendrust book...
+* add languages: Erbil, Badini, Iraqi Arabic, Persian, Turkish...
+* if all questoins answered, answering again to save as dated exam
+* add jokes eg old man saying how i can live without rice?! (see colornotes)
+* if psych status selected, next ask for details: kham, trs, qalaq...
+
+DONE
+* add login page
+* add seek buttons (5 sec backward and forward) and keyboard shortcuts.
+* add height and weight
+* write script for each slide
+* feedback placeholder text in 3 lang
+* bug: hidden elements are clickable
+* add menu for table of contents, speed
+* play and pause similar to video players
+* at the end of slides, stop and offer related links eg koraw, jokes...
+*‌ select more than one cause eg genetics then obesity...
+*‌ select more than one food eg worst food then best food...
+* if all questoins answered, answering again to update existing answer, before server
+* jump to part of slide by clicking on table of content for the slide.
+* add large pictures as visuals opposite to (below on mobile) text, appear and disappear with mp3 cue
+* add time prgress bar above lower menu
+* chart text in 3 lang
+* add validation for numbers eg YOB, blood sugar...
+* add audio based on number of correct answers eg you got 1 (2 or 3) answers wrong.
+* add dob, years of dm, max blood sugar and hb1c
+* add pictures for food (next to line)
+* make answer slide clickable: lead to explanation of answers 1 cause 2 treatment 3 food: worst to best
+* flag for lang change
+* save data first local storage
+* validate answer eg no text entered when other selected
+* slides overview: with detail and title only
+
+STEPS
+* Load first page with Play Button
+* On Button Click: play slide 1 audio 
+* On Audio Timer: loop through array of time steps for fisrt slide -> show next step
+* On Finished mp3: advance to next slide or do something based on the file name (eg get dymanic audio like dm duration) and repeat previous: On Audio Timer
+-->

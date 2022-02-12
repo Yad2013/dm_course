@@ -31,7 +31,7 @@ var rt=document.querySelector(':root');
 var more=`<div id=mor><p> <a onclick="get_slide_contents()">Contents...</a></p><p>Speed: ${spt}</p></div>`;
 const PGB="<p-b><div id=pbt></div><div id=pbw><a id=pbr></a></div></p-b>";
 
-const BPC=`<div id=dimg><img id=title_img src=dm_test.jpg><svg id="vpb" viewBox="0 0 200 200" alt="Play video"><circle cx="100" cy="100" r="90" fill="none" stroke-width="15" stroke="#000"></circle><polygon points="70, 55 70, 145 145, 100" fill="#000"></polygon></svg></div>`;
+const BPC=`<div id=dimg><img id=title_img src="res/pic/dm_test.jpg"><svg id="vpb" viewBox="0 0 200 200" alt="Play video"><circle cx="100" cy="100" r="90" fill="none" stroke-width="15" stroke="#000"></circle><polygon points="70, 55 70, 145 145, 100" fill="#000"></polygon></svg></div>`;
 const BPL=`<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0z" fill="none"></path><path d="M8 5v14l11-7z"></path></svg>`;
 const BPR=`<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0z" fill="none"></path><path d="M16 5v14l-11-7z"></path></svg>`;
 const BPS=`<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0z" fill="none"/><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>`;
@@ -380,10 +380,10 @@ function format_text(t,ii,f,ll,m){ // text, slide no, flag: play or show text, l
       img=get_file_name(j);
       // console.log(s,img);
       }
-    s=s.replaceAll("<img_40>",`<img class="w40 ${rl} ${cls}" src=${img} id=1${i0}${j0}>`);
-    s=s.replaceAll("<img_50>",`<img class="w50 ${rl} ${cls}" src=${img} id=1${i0}${j0}>`);
-    s=s.replaceAll("<img_60>",`<img class="w60 ${rl} ${cls}" src=${img} id=1${i0}${j0}>`);
-    s=s.replaceAll("<img>",`<img src=${img} id=1${i0}${j0}>`);
+    s=s.replaceAll("<img_40>",`<img src="res/pic/${img}" class="w40 ${rl} ${cls}" id=1${i0}${j0}>`);
+    s=s.replaceAll("<img_50>",`<img src="res/pic/${img}" class="w50 ${rl} ${cls}" id=1${i0}${j0}>`);
+    s=s.replaceAll("<img_60>",`<img src="res/pic/${img}" class="w60 ${rl} ${cls}" id=1${i0}${j0}>`);
+    s=s.replaceAll("<img>",`<img src="res/pic/${img}" id=1${i0}${j0}>`);
     s=s.replaceAll("___",`<input id=3${i0}${j0} type=text onclick="tbf(2${i0}${j0})">`);
     s=s.replaceAll("<ymd_combo>",`<select id=4${i0}${j0}><option>${dica[1][lng]}</option><option>${dica[2][lng]}</option><option>${dica[3][lng]}</option></select>`);
     cls=f==1&&i>-1?" class=h":" class='h c'";
@@ -632,7 +632,7 @@ function ps(f,t){
       });
     }
   // aud.src=f;
-  aud.src=afn;
+  aud.src="res/mp3/"+afn;
   // aud.currentTime=t;
   // console.log(i,t,f,afn,aud.currentTime);
   spd=parseFloat(localStorage.getItem("DM_SPD"));
@@ -790,7 +790,7 @@ function pfs(id){
   // var audio=new Audio("f"+id+".mp3");
   aud.pause();
   afp=aud.currentTime;
-  aud2.src=`f${id}.mp3`;
+  aud2.src=`res/mp3/f${id}.mp3`;
   aud2.play();
   // audio.play();
 	}
@@ -944,7 +944,7 @@ function login(){
 
 function get_login(f){
   let cls=f==1&&i>-1?" class=h":"";
-  let rv=`<br><button id=log${cls} onclick="login()"><img src=g.svg> Login with Google</button><br>`;
+  let rv=`<br><button id=log${cls} onclick="login()"><img src="res/pic/g.svg"> Login with Google</button><br>`;
   return rv;
   }
 

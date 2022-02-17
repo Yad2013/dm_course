@@ -179,6 +179,7 @@ document.addEventListener("keydown",event=>{
   if(event.key===" ") play_slides();
   if(event.key==="p") play_slides();
   if(event.key==="h") gohome();
+  if(event.key==="Enter") cb();
   
   if(event.key==="l") clf(-1);
   // if(event.key==="k") clf(0);
@@ -389,7 +390,7 @@ function format_text(t,ii,f,ll,m){ // text, slide no, flag: play or show text, l
     cls=f==1&&i>-1?" class=h":" class='h c'";
     s=s.replaceAll(" @",` <s${cls}>`);
     s=s.replaceAll("@ ",`</s>`);
-    // s=s.replaceAll("_"," ");
+    // s=s.replaceAll("_","" "");
     if(fch==1){
       if(ii==0) hd=`<h1${cls}${lnk}>${s}</h1>`; else hd=`<h2${cls}${lnk}>${s}</h2><div id=sb>`;
       var bpm=`<u>&#9679;</u>`;lng==2?BPL:BPR;

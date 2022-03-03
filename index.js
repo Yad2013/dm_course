@@ -943,9 +943,14 @@ function login(){
   console.log("login code");
   }
 
+function is_logged_in(){
+  console.log("login");
+  }
+
 function get_login(f){
   let cls=f==1&&i>-1?" class=h":"";
-  let rv=`<br><button id=log${cls} onclick="login()"><img src="res/pic/g.svg"> Login with Google</button><br>`;
+  // let rv=`<br><button id=log${cls} onclick="login()"><img src="res/pic/g.svg"> Login with Google</button><br>`;
+  let rv=`<br><button id=google-signin-button><img src="res/pic/g.svg"> Login with Google</button><br>`;
   return rv;
   }
 

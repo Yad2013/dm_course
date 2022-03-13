@@ -4,10 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Diabetes Nutrition Program</title>
-<link rel="stylesheet" href="index.css">
+  <script type='text/javascript' src='/base-data.js'></script>
+  <script type='text/javascript' src='/base.js'></script>
+  <script type='text/javascript' src='/backend.js'></script>
+  <script type='text/javascript' src='/signin.js'></script>
+  <link rel="stylesheet" href="index.css">
 </head>
 <body>
-<div id=lng></div>
+<div id=lng onclick="lng_click()"></div>
 <div id=vid onclick="vid_click()" ondblclick="vid_dblclick()"></div>
 <div id=txt></div>
 <div id=ftr></div>
@@ -15,6 +19,7 @@
 <audio id=aud2 preload=metadata onended="audio_ended2()"><source src="" type="audio/mpeg"></audio>
 <script src="data.js"></script>
 <script src="index.js"></script>
+<script src="https://apis.google.com/js/api:client.js" defer></script>
 </body>
 </html>
 
@@ -33,18 +38,18 @@ FEATURES
 * other courses: parenting, marriage, english course intro...
 * add reference eg occult diabetes...
 * social media for DM patients? Group support?
-* make collapsible mind map
+* make collapsible mind map toc
 * follow up on patients weight, compliance %, why not 100%?
 
 TODO
 * add audio for each slide (26 so far)
 * add htn duration, medications, referred by (see dm sheet), family history (slide oon geneitcs?), smoking
+* if psych status selected, next ask for details: kham, trs, qalaq...
 * upload local storage data to server
-* check ppt, transo, doc, xoraki tendrust book...
 * add languages: Erbil, Badini, Iraqi Arabic, Persian, Turkish...
 * if all questoins answered, answering again to save as dated exam
 * add jokes eg old man saying how i can live without rice?! (see colornotes)
-* if psych status selected, next ask for details: kham, trs, qalaq...
+* check ppt, transo, doc, xoraki tendrust book...
 
 DONE
 * add login page

@@ -515,16 +515,19 @@ function toggle_related(){
   }
 
 function toggle_full_text(n){
-  console.log("Full text: "+n);
   ps(0,0);
   load_page(0);
-  vid.style.height="";
-  fft=n==0?`<a onclick="get_full_text(1)">Show</a>`:`<a onclick="get_full_text(0)">Hide</a>`;
+  fft=n==0?`<a onclick="toggle_full_text(1)">Show</a>`:`<a onclick="toggle_full_text(0)">Hide</a>`;
   more=`<div id=mor><p>Full Text: ${fft}</p><p>Speed: ${spt}</p><p><a onlcick="show_about()">About</a></p></div>`;
   ftr.innerHTML=more+PGB+FTB;
   let rel=get_related();
   if(rel!=false) rel+="<hr>"; else rel="";
-  stt.innerHTML="<hr><div id=gft onclick='vid_click()''>"+get_full_text()+"</div><hr>"+rel+"<div id=nav>"+PRV+NXT+"</div>";
+  let ft="";
+  if(n==1){
+    ft="<hr><div id=gft onclick='vid_click()''>"+get_full_text()+"</div><hr>"+rel+"<div id=nav>"+PRV+NXT+"</div>";
+    vid.style.height="";
+    }
+  stt.innerHTML=ft;
   // stt.style.height="initial";
   stt.scrollIntoView();
   hide_menu();

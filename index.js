@@ -51,8 +51,8 @@ window.onload=load_page(0);
 function load_page(f){
   var qs=window.location.search;
   qs=qs.replaceAll("?","");
-  qsa=qs.split("=");
-  // if(qsa[0].length>1) location.href="index.html";
+  qsb=qs.split("&");
+  qsa=qsb[0].split("=");
   if(typeof qsa[1]!=="undefined"){
     if(isNaN(qsa[1])) {
       if(qsa[1]=="o") get_content_overview(0); 

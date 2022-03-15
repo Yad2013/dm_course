@@ -51,6 +51,9 @@ text-align:center;
 margin:0.4em 0;
 cursor:var(--cr);
 }
+a, a:visited{
+color:#282;
+}
 s-t {
 display:block;
 color:#00f;
@@ -281,6 +284,14 @@ transition:bottom 0.3s;
 margin:6px;
 margin-bottom:12px;
 }
+#txt li{
+font-size:24px;
+}
+#txt ul{
+margin:0;
+padding-inline-start:20px;
+}
+
 #ftb{
 text-align:center;
 background-color:#fff;
@@ -479,4 +490,16 @@ line-height:30px;
 max-height:340px;
 width:100%;
 }
+#txt p{
+margin:6px;
+margin-bottom:12px;
+}
+#txt li{
+font-size:20px;
+}
+#txt ul{
+margin:0;
+padding-inline-start:20px;
+}
+    
 }

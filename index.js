@@ -52,14 +52,15 @@ function load_page(f){
   var qs=window.location.search;
   qs=qs.replaceAll("?","");
   qsa=qs.split("=");
-  if(qsa[0].length>1) location.href="index.html";
+  // if(qsa[0].length>1) location.href="index.html";
   if(typeof qsa[1]!=="undefined"){
     if(isNaN(qsa[1])) {
       if(qsa[1]=="o") get_content_overview(0); 
       if(qsa[1]=="c") get_content_overview(1);
       if(qsa[1]=="m") get_mind_map(); 
       if(qsa[1]!="t") return true;
-      } else i=qsa[1];
+      } else localStorage.setItem("DM_SLD", qsa[1]); // i=qsa[1];
+    location.href="index.html";
     }
   var rv="";
   // console.log(i,sta);
@@ -160,7 +161,14 @@ function load_page(f){
     default:
       break;
   }
-  }
+  if (document.getElementById("google-signin-button")) {
+    googleAuth2Init((auth2) => {
+      console.log("Adding click handler...");
+      auth2.attachClickHandler(document.getElementById('google-signin-button'), {}, onGoogleSignIn);
+      console.log("Adding click handler done.");
+    });
+  } 
+}
 
 document.addEventListener("keydown",event=>{
   let f=0;
@@ -529,7 +537,14 @@ function get_full_text(){
   if(rv.indexOf("<notes>")==-1) return false;
   rv=rv.split("<notes>")[1];
   rv=rv.replaceAll("ک","ك");
+  rv=mark_down(rv);
   rv=rv.replaceAll("\n","<p>");
+  return rv;
+  }
+
+function mark_down(rv){
+  rv=rv.replace(/^\* (.*$)/gim, "<ul><li>$1</li></ul>");
+  rv=rv.replace(/\[(.*?)\]\((.*?)\)/gim, "<a href='$2'>$1</a>")
   return rv;
   }
 

@@ -21,7 +21,7 @@ var afn=""; // audio file name
 var afp=0;  // audio file poistion
 var qsa=[0,0];
 var stai=[]; // sta[i]
-var sto; // setTimeOut
+var toh; // setTimeOut handle
 const aud=document.getElementById("aud");
 const aud2=document.getElementById("aud2");
 const vid=document.getElementById("vid");
@@ -238,6 +238,7 @@ function play_slides(){
   if(aud.currentTime>0 || !aud.paused){
     // location.reload();
     if(aud.paused) aud.play(); else {aud.pause(); show_menu(1);}
+    if(aud.paused) document.getElementById("bpl").innerHTML=BPL; else document.getElementById("bpl").innerHTML=BPS;
     return true;
     }
   if(aud.currentTime==0 && aud.paused) load_page(1);
@@ -291,11 +292,11 @@ function next_slide(f){
     if(rel!=false) rel+="<hr>"; else rel="";
     stt.innerHTML="<hr><div id=gft onclick='vid_click()''>"+get_full_text()+"</div><hr>"+rel+"<div id=nav>"+PRV+NXT+"</div>";
     // stt.innerHTML="<hr>"+get_full_text();
-    stt.style.height="initial";
+    // stt.style.height="initial";
     vid.style.height="";
     }
   window.scrollTo(0,0);
-  hide_menu();
+  // hide_menu();
   }
 
 function prev_slide(f){
@@ -310,9 +311,9 @@ function prev_slide(f){
   stt.innerHTML="<hr><div id=gft onclick='vid_click()''>"+get_full_text()+"</div><hr>"+rel+"<div id=nav>"+PRV+NXT+"</div>";
   // stt.innerHTML="<hr>"+get_full_text()+"<hr>"+rel+"<div id=nav>"+PRV+NXT+"</div>";
   // stt.innerHTML="<hr>"+get_full_text();
-  stt.style.height="initial";
+  // stt.style.height="initial";
   window.scrollTo(0,0);
-  hide_menu();
+  // hide_menu();
   }
 
 function goto(n,p) {
@@ -342,14 +343,19 @@ function vid_click(){
   // console.log(this.id);
   if(ftr.style.bottom=="-82px") {
     show_menu(1);
-    stt.style.height="0px";
+    // stt.style.height="0px";
     // setTimeout(()=>{hide_menu();}, 3000);
-    } else hide_menu();
+    } else {
+      if(mns==0) hide_menu();
+      mns=0;
+    }
   if(aud.paused) document.getElementById("bpl").innerHTML=BPL; else document.getElementById("bpl").innerHTML=BPS;
   }
 
+var mns=0;
 function vid_dblclick(){
   let s=event.clientX<window.innerWidth/2?-5:5;
+  mns=1;
   seek(s);
   }
   
@@ -488,7 +494,7 @@ function get_subtitles(){
   rv=rv.replaceAll("ک","ك");
   rv=rv.replaceAll("\n","<p>");
   stt.innerHTML=rv;
-  stt.style.height="initial";
+  // stt.style.height="initial";
   }
 
 function get_related(){
@@ -530,7 +536,7 @@ function toggle_full_text(n){
   stt.innerHTML=ft;
   // stt.style.height="initial";
   stt.scrollIntoView();
-  hide_menu();
+  // hide_menu();
   }
 
 function get_full_text(){
@@ -580,7 +586,7 @@ function get_slide_contents(){
     rv+=`<c-t onclick="ps(1,${ts})">${tt} ${v}</c-t>`;
     });
   stt.innerHTML=rv;
-  stt.style.bottom="0px";
+  // stt.style.bottom="0px";
   }
 
 function get_file_name(j){
@@ -677,37 +683,36 @@ function file_exists(url){
 function seek(s){
   let ss=aud.currentTime+s;
   if(ss<0) ss=0;
-  ps(1,aud.currentTime+s);
+  ps(1,ss);
+  if(aud.paused) document.getElementById("bpl").innerHTML=BPL; else document.getElementById("bpl").innerHTML=BPS;
   show_menu(1);
   }
 
 function ps(f,t){
-  hide_menu();
+  // hide_menu();
   if(f==0) {aud.pause(); aud.currentTime=0; return false;}
   if(i>26) afn="a000000.mp3";
-  if(t>0){
-    step=0;
-    stai=Array.from(sta[i]);
-    // console.log(t,stai.length,steps.length);
-    load_page(1);
-    // aud.currentTime=t;
-    var j=0;
-    a=Array.from(sta[i]);
-    while(t>a[j]){
-      j++;
-      }
-    // console.log(t,j,stai);
-    var i0=i.toString().padStart(2,"0");
-    afn=`a0040${i0}.mp3#t=${t}`;  
-    // load_page(i);
-    var b=[];
-    Array.from(sta[i]).forEach(v=> {
-      if(!isNaN(v)) b.push(v);
-      });
-    Array.from(steps).forEach((v,j)=> {
-      if(b[j]>t) v.classList.remove("c"); else v.classList.add("c")
-      });
+  step=0;
+  stai=Array.from(sta[i]);
+  // console.log(t,stai.length,steps.length);
+  load_page(1);
+  // aud.currentTime=t;
+  var j=0;
+  a=Array.from(sta[i]);
+  while(t>a[j]){
+    j++;
     }
+  // console.log(t,j,stai);
+  var i0=i.toString().padStart(2,"0");
+  afn=`a0040${i0}.mp3#t=${t}`;  
+  // load_page(i);
+  var b=[];
+  Array.from(sta[i]).forEach(v=> {
+    if(!isNaN(v)) b.push(v);
+    });
+  Array.from(steps).forEach((v,j)=> {
+    if(b[j]>t) v.classList.remove("c"); else v.classList.add("c")
+    });
   // aud.src=f;
   aud.src="res/mp3/"+afn;
   // aud.currentTime=t;
@@ -974,10 +979,12 @@ function get_mind_map(){
     stt.innerHTML="";
     }
 
+var dl=0;
+var tl=0;
 function audio_update() {
   var t=aud.currentTime;
   let d=aud.duration;
-  // console.log(t,stai);
+  if(t>0) {tl=t; dl=d;} 
   let da=[7,5,3,1,1,39]; // duration array for multiple mp3 per slide
   if(i==8) d=da.reduce(array_sum,0);
   if(afn=="a004008_1.mp3"||afn=="a004008_2.mp3"||afn=="a004008_3.mp3") t=t+da[0];
@@ -985,9 +992,11 @@ function audio_update() {
   if(afn.charAt(0)=="n") t=t+da[0]+da[1]+da[2];
   if(afn.charAt(0)=="t") t=t+da[0]+da[1]+da[2]+da[3];
   if(afn=="a004008_5.mp3") t=t+da[0]+da[1]+da[2]+da[3]+da[4];
-  let tt=new Date(t * 1000).toISOString().substr(15,4);
-  let dd=isNaN(d)?"0:00":new Date(d * 1000).toISOString().substr(15,4);
-  document.getElementById("pbr").style.width=t/d*100+"%";
+  let tt=new Date(tl * 1000).toISOString().substr(15,4);
+  let dd=new Date(dl * 1000).toISOString().substr(15,4);
+  dl=d;
+  tl=t;
+  document.getElementById("pbr").style.width=tl/dl*100+"%";
   document.getElementById("pbt").innerHTML=tt+" / "+dd;
   var tava=[stai[0],0,0]; // time array (time,type: 0 step, 1 check answer,hide step by id)
   if(typeof stai[0]=="string"){
@@ -1025,7 +1034,6 @@ function logged_in(){
 
 function get_login(f){
   let cls=f==1&&i>-1?" class=h":"";
-  // let rv=`<br><button id=log${cls} onclick="login()"><img src="res/pic/g.svg"> Login with Google</button><br>`;
   let rv=`<br><button id=google-signin-button><img src="res/pic/g.svg"> Login with Google</button><br>`;
   return rv;
   }
@@ -1164,17 +1172,16 @@ function get_correct_answers(){ // get array of
 
 function show_related_link(){
   // ftr.style.bottom="-80px";
-  hide_menu();
+  // hide_menu();
   // if(get_related()!=false && subs==0) document.getElementById("lng").innerHTML=`<a onclick="toggle_related()">${INF}</a>`;
   }
 
 function audio_ended() {
   if(stsa.includes(i)) {
-    if(i!=7 && subs==1){
-      document.getElementById("cb").style="opacity:1;";
-      document.getElementById("cb").disabled=false;
-      }
-      return true;
+    if(i==7 && subs==1) return true;
+    document.getElementById("cb").style="opacity:1;";
+    document.getElementById("cb").disabled=false;
+    return true;
     }
   if(afn.charAt(0)=="n"||afn.charAt(0)=="t") afn=afn.charAt(0);
   // console.log(afn);
@@ -1341,7 +1348,7 @@ function get_more(){
   // show_menu(0);
   let lm=document.getElementById("more").offsetLeft;
   document.getElementById("mor").style=`bottom:66px;height:146px;left:${lm}px;border:1px #ccc solid;border-bottom:0;`
-  clearTimeout(sto);
+  clearTimeout(toh);
   }
 
 function pbs(v){
@@ -1351,7 +1358,7 @@ function pbs(v){
   more=`<div id=mor><p>Full Text: ${fft}</p><p>Speed: ${spt}</p><p><a onlcick="show_about()">About</a></p></div>`;
   ftr.innerHTML=more+PGB+FTB;
   aud.playbackRate=parseFloat(spd);
-  hide_menu();
+  // hide_menu();
   }
   
 function hide_menu(){
@@ -1365,12 +1372,14 @@ function show_menu(f){
   ftr.style.bottom="0px";
   let cbb=document.getElementById("pbt").innerHTML==""?"76px":"90px";
   if(document.getElementById("cb")) document.getElementById("cb").style.bottom=cbb;  
-  if(f) sto=setTimeout(()=>{hide_menu();}, 3000);
+  if(toh) clearTimeout(toh);
+  if(f) toh=setTimeout(()=>{hide_menu();}, 4000);
   }
   
 function lng_click(){
   if(i>0) toggle_full_text(1);
 }
+
 function edit_subtitles(){
   stt.contentEditable=true;
   }

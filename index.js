@@ -262,12 +262,14 @@ function next_slide(f){
       if(subs==0 && i==4) {
         if(ansa[0].split("|")[0]=="10407") {i++;break;}
         if(ansa[0].split("|")[0]=="10408") {i++;break;}
-        subs++;
+        if(ansa[0].split("|")[0]=="") i++; else subs++;
         }
       break;
     case 6:
       if(subs==1 && i==6) {subs=0;i++;}
-      if(subs==0 && i==6) subs++;
+      if(subs==0 && i==6) {
+        if(ansa[4].split("|")[0]=="") i++; else subs++;
+        }
       break;
     case 7:
       if(subs==1 && i==7) {subs=0;i++;}
@@ -290,10 +292,9 @@ function next_slide(f){
   ps(f,0,0);
   if(f==0){
     let rel=get_related();
-    if(rel!=false) rel+="<hr>"; else rel="";
-    stt.innerHTML="<hr><div id=gft onclick='vid_click()''>"+get_full_text()+"</div><hr>"+rel+"<div id=nav>"+PRV+NXT+"</div>";
-    // stt.innerHTML="<hr>"+get_full_text();
-    // stt.style.height="initial";
+    if(rel!=false) rel="<hr>"+rel; else rel="";
+    hr=question_answered()?"<hr>":"";
+    stt.innerHTML=get_full_text()+rel+"<hr><div id=nav>"+PRV+NXT+"</div>";
     vid.style.height="";
     }
   window.scrollTo(0,0);
@@ -308,11 +309,9 @@ function prev_slide(f){
   if(i==0) document.getElementById("vpb").style="visibility:hidden;";
   ps(f,0,0);
   let rel=get_related();
-  if(rel!=false) rel+="<hr>"; else rel="";
-  stt.innerHTML="<hr><div id=gft onclick='vid_click()''>"+get_full_text()+"</div><hr>"+rel+"<div id=nav>"+PRV+NXT+"</div>";
-  // stt.innerHTML="<hr>"+get_full_text()+"<hr>"+rel+"<div id=nav>"+PRV+NXT+"</div>";
-  // stt.innerHTML="<hr>"+get_full_text();
-  // stt.style.height="initial";
+  if(rel!=false) rel="<hr>"+rel; else rel="";
+  hr=question_answered()?"<hr>":"";
+  stt.innerHTML=get_full_text()+rel+"<hr><div id=nav>"+PRV+NXT+"</div>";
   window.scrollTo(0,0);
   // hide_menu();
   }
@@ -476,7 +475,7 @@ function format_text(t,ii,f,ll,m){ // text, slide no, flag: play or show text, l
     rv=rv.replaceAll("<login>",get_login(f));
     }
   if(ii==8){
-    rv=rv.replaceAll("<answers>",get_answers(f));
+    if(question_answered()) rv=rv.replaceAll("<answers>",get_answers(f)); else rv=rv.replaceAll("<answers>",`<p>${dica[19][lng]}</p>`);
     }
   if(m==0) rv+="</div>";
   if(stsa.includes(i)){
@@ -527,20 +526,23 @@ function toggle_full_text(n){
   fft=n==0?`<a onclick="toggle_full_text(1)">Show</a>`:`<a onclick="toggle_full_text(0)">Hide</a>`;
   more=`<div id=mor><p>Full Text: ${fft}</p><p>Speed: ${spt}</p><p><a onlcick="show_about()">About</a></p></div>`;
   ftr.innerHTML=more+PGB+FTB;
-  let rel=get_related();
-  if(rel!=false) rel+="<hr>"; else rel="";
-  let ft="";
+  // let ft="";
   if(n==1){
-    ft="<hr><div id=gft onclick='vid_click()''>"+get_full_text()+"</div><hr>"+rel+"<div id=nav>"+PRV+NXT+"</div>";
-    vid.style.height="";
+    let rel=get_related();
+    if(rel!=false) rel="<hr>"+rel; else rel="";
+      hr=question_answered()?"<hr>":"";
+    stt.innerHTML=get_full_text()+rel+"<hr><div id=nav>"+PRV+NXT+"</div>";
+    // ft="<hr><div id=gft onclick='vid_click()'>"+get_full_text()+"</div>"+hr+rel+"<div id=nav>"+PRV+NXT+"</div>";
+    // vid.style.height="";
     }
-  stt.innerHTML=ft;
+  // stt.innerHTML=ft;
   // stt.style.height="initial";
   stt.scrollIntoView();
   // hide_menu();
   }
 
 function get_full_text(){
+  if(i==8 && !question_answered()) return "";
   let rv=cnta[lng].split("\n\n")[i];
   if(subs==1) rv=cnta1[lng].split("\n\n")[i];
   if(subs==2) rv=cnta2[lng].split("\n\n")[i];
@@ -549,7 +551,7 @@ function get_full_text(){
   rv=rv.replaceAll("ک","ك");
   rv=mark_down(rv);
   rv=rv.replaceAll("\n","<p>");
-  return rv;
+  return "<hr><div id=gft onclick='vid_click()'>"+rv+"</div>";
   }
 
 function mark_down(rv){
@@ -865,7 +867,16 @@ function input_validate_feedback(id){
   }
 
 function upload_answers(){
-  console.log("Save local data to server.");
+  const dm_data=JSON.parse(localStorage.getItem("DM_DATA")); 
+  // console.log("Save local data to server.");
+  return fetch(`${apiBaseUrl}/health/dm`, {
+    method: "POST",
+    headers: {
+        'Content-Type': 'application/json',
+        ...authHeader()
+      },
+    body: JSON.stringify({dm_data})
+    });
   }  
 function pfs(id){
   document.getElementById(id).focus();
@@ -950,7 +961,7 @@ function get_recursive(a,p){
     v=sla[av];
     var va=v.split("\n");
     v=va[0];
-    console.log(lv,jj,v,e);
+    // console.log(lv,jj,v,e);
     rvr+=format_text(v,av,0,1,lv);
     get_recursive(a,jj);
     lv--;
@@ -1035,20 +1046,23 @@ function get_login(f){
   return rv;
   }
 
+function question_answered() {
+  let rv=1;
+  if(ansa[0].split("|")[0]=="") rv=0;
+  if(ansa[3].split("|")[0]=="") rv=0;
+  if(ansa[4].split("|")[0]=="") rv=0;
+  if(ansa[8].split("|")[2]=="") rv=0;
+  return rv;
+  }
+
 function get_answers(f){
-  // edit answer array
-  // console.log(ansa);
-  // if(ansa[0].length>6) ansa[0]+="|"+ansa[0].split("|")[1]; else ansa[0]+="|"+ansa[0].split("|")[1];
-  // if(ansa[1].length>6) ansa[1]+="|"+ansa[3].split("|")[1]; else ansa[2]+="|"+ansa[2].split("|")[1];
-  // if(ansa[2].length>6) ansa[2]+="|"+ansa[3].split("|")[1]; else ansa[2]+="|"+ansa[2].split("|")[1];
-  // if(ansa[3].length>6) ansa[4]+="|"+ansa[4].split("|")[1];
-  // if(ansa[5].length>6) ansa[4]+="|"+ansa[5].split("|")[1];
-  if(typeof ansa[6]!=='undefined') ansa[6]+="|"+ar_to_en(ansa[6].split("|")[1]);
-  if(typeof ansa[7]!=='undefined') ansa[7]+="|"+ar_to_en(ansa[7].split("|")[1]);
-  if(typeof ansa[8]!=='undefined') ansa[8]+="|"+ar_to_en(ansa[8].split("|")[1]);
-  if(typeof ansa[9]!=='undefined') ansa[9]+="|"+ar_to_en(ansa[9].split("|")[1]);
-  if(typeof ansa[10]!=='undefined') ansa[10]+="|"+time_to_no(ansa[10].split("|")[1]);
-  if(typeof ansa[11]!=='undefined') ansa[11]+="|"+time_to_no(ansa[11].split("|")[1]);
+  console.log(ansa);
+  ansa[6]+="|"+ar_to_en(ansa[6].split("|")[1]);
+  ansa[7]+="|"+ar_to_en(ansa[7].split("|")[1]);
+  ansa[8]+="|"+ar_to_en(ansa[8].split("|")[1]);
+  ansa[9]+="|"+ar_to_en(ansa[9].split("|")[1]);
+  ansa[10]+="|"+time_to_no(ansa[10].split("|")[1]);
+  ansa[11]+="|"+time_to_no(ansa[11].split("|")[1]);
 
   var ans="";
   var qus="";
